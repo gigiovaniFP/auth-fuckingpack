@@ -1,132 +1,19 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>FUCKINGPACK*</title>
-  
-  <!-- Fontes -->
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Sora:wght@400;500;700&display=swap" rel="stylesheet" />
-  
-  <!-- Estilo Profissional -->
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Sora', sans-serif;
-      color: #1a1a1a;
-    }
-
-    body {
-      background: #f8f8f8;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
-
-    .container {
-      max-width: 500px;
-      width: 100%;
-      background: #fff;
-      border-radius: 16px;
-      padding: 32px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-    }
-
-    h1 {
-      font-family: 'Oswald', sans-serif;
-      font-size: 2.5rem;
-      margin-bottom: 12px;
-      text-align: center;
-      letter-spacing: 1px;
-    }
-
-    p.description {
-      text-align: center;
-      margin-bottom: 24px;
-      color: #555;
-      font-size: 1rem;
-    }
-
-    input[type="text"] {
-      width: 100%;
-      padding: 12px 16px;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      border-radius: 12px;
-      font-size: 1rem;
-    }
-
-    button {
-      width: 100%;
-      padding: 14px 16px;
-      border: none;
-      border-radius: 12px;
-      background-color: #222;
-      color: #fff;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #444;
-    }
-
-    .result {
-      margin-top: 20px;
-      padding: 16px;
-      background: #f0f0f0;
-      border-radius: 12px;
-      font-size: 0.95rem;
-      color: #333;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald&family=Sora&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container">
     <h1>FUCKINGPACK*</h1>
-    <p class="description">Autentique seu produto com segurança</p>
-
-    <input type="text" id="codeInput" placeholder="Digite o código da embalagem" />
-    <button onclick="verifyCode()">Autenticar</button>
-
-    <div id="result" class="result" style="display: none;"></div>
+    <p>Autentique seu produto</p>
+    <button onclick="autenticar()">Autenticar Agora</button>
+    <div id="resultado"></div>
   </div>
 
-  <!-- Script para autenticação com Google Sheets -->
-  <script>
-    async function verifyCode() {
-      const input = document.getElementById("codeInput").value.trim();
-      const resultDiv = document.getElementById("result");
-
-      if (!input) {
-        resultDiv.textContent = "Digite um código válido.";
-        resultDiv.style.display = "block";
-        return;
-      }
-
-      resultDiv.textContent = "Verificando...";
-      resultDiv.style.display = "block";
-
-      const url = `https://docs.google.com/spreadsheets/d/1D-fKwuWi0O7alSAiWx-0RuJZiSo0G8MRGTk_8kLYrdU/edit?gid=0#gid=0`;
-
-      try {
-        const res = await fetch(url);
-        const data = await res.json();
-
-        if (data.status === "valid") {
-          resultDiv.textContent = `✅ Produto: ${data.product}\nData: ${data.date}`;
-        } else {
-          resultDiv.textContent = "❌ Código inválido ou expirado.";
-        }
-      } catch (e) {
-        resultDiv.textContent = "Erro ao conectar com o banco de dados.";
-      }
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
