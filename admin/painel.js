@@ -1,4 +1,4 @@
-const scriptURL = 'https://script.google.com/macros/s/AKfycbyBQ6KuGjAUetKFtKLhqXbTc1jfZbRNno4u8PRUAE6_V79Ky3PE5PvrX1eYrnVReiFTCg/exec';
+const scriptURL = 'https://script.google.com/macros/s/AKfycbxethkvsMniO9QOQ-dxiUHuQM4TXAImeATpKYHAlsLmqfpMg47UheU4UsY9MrK3Wpx1OA/exec';
 
 function carregarDados() {
   fetch(scriptURL)
