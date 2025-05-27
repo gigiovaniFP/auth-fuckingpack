@@ -1,32 +1,27 @@
 body {
   font-family: 'Sora', sans-serif;
   background-color: #111;
-  color: #f8f8f8;
+  color: #fff;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   height: 100vh;
+  margin: 0;
 }
 
-.container {
+main {
   text-align: center;
-  max-width: 400px;
-  padding: 30px;
-  border: 2px solid #888;
-  border-radius: 10px;
 }
 
-h1 {
+.titulo {
   font-family: 'Oswald', sans-serif;
-  font-size: 32px;
+  font-size: 2.5em;
+  margin-bottom: 20px;
 }
 
-button {
-  margin-top: 20px;
-  padding: 12px 24px;
-  background-color: #f88;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
+.box {
+  border: 1px solid #444;
+  padding: 20px;
+  background: #1a1a1a;
+  border-radius: 8px;
 }
