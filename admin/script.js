@@ -1,5 +1,5 @@
 async function carregarDados() {
-  const sheetID = "SEU_ID_DO_GOOGLE_SHEET_AQUI";
+  const sheetID = "1D-fKwuWi0O7alSAiWx-0RuJZiSo0G8MRGTk_8kLYrdU";
   const range = "Sheet1!A1:D50"; // ajuste para seu intervalo real
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/${range}?key=SUA_API_KEY_DO_GOOGLE`;
 
