@@ -1,42 +1,25 @@
-function getCodigoDaURL() {
-  const url = new URL(window.location.href);
-  return url.searchParams.get("id") || "desconhecido";
-}
+const params = new URLSearchParams(window.location.search);
+const codigo = params.get("codigo");
 
-async function autenticar() {
-  const codigo = getCodigoDaURL();
-  const resultado = document.getElementById("resultado");
-
-  resultado.innerText = "Autenticando...";
-
-  try {
-    const response = await fetch(`https://api.sheetson.com/v2/sheets/Sheet1?id=${codigo}`, {
-      headers: {
-        "Authorization": "Bearer sua-chave-sheetson",
-        "X-Spreadsheet-Id": "ID-DA-SUA-PLANILHA"
+if (!codigo) {
+  document.getElementById("resultado").innerText = "Código não fornecido.";
+} else {
+  fetch(`https://script.google.com/macros/s/AKfycbyBQ6KuGjAUetKFtKLhqXbTc1jfZbRNno4u8PRUAE6_V79Ky3PE5PvrX1eYrnVReiFTCg/exec?codigo=${codigo}`)
+    .then(res => res.json())
+    .then(data => {
+      if (!data["Cliente"]) {
+        document.getElementById("resultado").innerText = "Código inválido.";
+        return;
       }
+
+      document.getElementById("resultado").innerHTML = `
+        <strong>✅ Código válido!</strong><br><br>
+        <b>Cliente:</b> ${data["Cliente"]}<br>
+        <b>Produto:</b> ${data["Produto"]}<br>
+        <b>Data:</b> ${data["Data de Autenticação"] || 'Autenticado agora'}<br>
+      `;
+    })
+    .catch(() => {
+      document.getElementById("resultado").innerText = "Erro ao verificar o código.";
     });
-
-    const data = await response.json();
-
-    if (data?.status === "autenticado") {
-      resultado.innerText = "Este código já foi autenticado.";
-    } else {
-      await fetch(`https://api.sheetson.com/v2/sheets/Sheet1/${codigo}`, {
-        method: "PUT",
-        headers: {
-          "Authorization": "Bearer sua-chave-sheetson",
-          "X-Spreadsheet-Id": "ID-DA-SUA-PLANILHA",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          status: "autenticado",
-          data: new Date().toISOString().split("T")[0]
-        })
-      });
-      resultado.innerText = "Produto autenticado com sucesso.";
-    }
-  } catch (e) {
-    resultado.innerText = "Erro na autenticação.";
-  }
 }
