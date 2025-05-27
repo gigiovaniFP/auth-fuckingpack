@@ -1,23 +1,20 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FUCKINGPACK* Painel Privado</title>
-  <link rel="stylesheet" href="style.css" />
-  <script defer src="script.js"></script>
-  <script defer src="auth.js"></script>
+  <meta charset="UTF-8">
+  <title>Painel | FUCKINGPACK*</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald&family=Sora&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="login-container" id="loginContainer">
-    <h1>Login do Painel</h1>
-    <input type="password" id="password" placeholder="Digite a senha" />
-    <button onclick="login()">Entrar</button>
+  <div class="container">
+    <h1>Painel de Autenticações</h1>
+    <div id="dados"></div>
   </div>
 
-  <div class="dashboard hidden" id="dashboard">
-    <h1>Painel FUCKINGPACK*</h1>
-    <div id="dataContainer">Carregando dados...</div>
-  </div>
+  <script src="functions.js"></script>
+  <script src="overflows.js"></script>
+  <script src="parities.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
