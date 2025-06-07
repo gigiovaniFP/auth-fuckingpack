@@ -1,27 +1,31 @@
 body {
-  font-family: 'Sora', sans-serif;
-  background-color: #111;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  margin: 0;
+    font-family: 'Sora', sans-serif;
+    background-color: #111;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
 }
 
 main {
-  text-align: center;
+    text-align: center;
+    width: 90%;
+    max-width: 500px;
 }
 
 .titulo {
-  font-family: 'Oswald', sans-serif;
-  font-size: 2.5em;
-  margin-bottom: 20px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 2.5em;
+    margin-bottom: 20px;
 }
 
 .box {
-  border: 1px solid #444;
-  padding: 20px;
-  background: #1a1a1a;
-  border-radius: 8px;
+    border: 1px solid #444;
+    padding: 20px;
+    background: #1a1a1a;
+    border-radius: 8px;
+    line-height: 1.6;
 }
+
