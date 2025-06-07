@@ -1,5 +1,5 @@
 // URL do Google Apps Script publicado como aplicativo da web
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyB8aUnAKR_ekOz_tn8_kt7Sae39TgPpc0jtTP6rBzZ9U8DYB40ROUhaJDsqdq0JJ_-/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBchIdAOE5PMIMd_hGOraBAAdY4PpsbgeOUtxhkSuF5Y4jxxPO5kp7Ao5ZvO24uUnQ/exec';
 
 // URL base do site para autenticação
 const SITE_URL = 'https://fuckingpack.xyz/?code=';
