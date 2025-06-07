@@ -1,5 +1,5 @@
 // URL do Google Apps Script publicado como aplicativo da web
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw3t1Du_aX_EbljanlJgV9Zh3AR_gY006xtEilrmFEqlgLf0pQ8pYADHWxqnd983EPu/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyB8aUnAKR_ekOz_tn8_kt7Sae39TgPpc0jtTP6rBzZ9U8DYB40ROUhaJDsqdq0JJ_-/exec';
 
 // URL base do site para autenticação
 const SITE_URL = 'https://fuckingpack.xyz/?code=';
@@ -125,7 +125,7 @@ function exibirTabela(data) {
             if (chave === 'Data') {
                 html += `<td>${formatarData(valor)}</td>`;
             } else {
-                html += `<td>${valor || '-'}</td>`;
+                html += `<td>${valor || '-'}`;
             }
         });
         
