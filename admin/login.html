@@ -1,99 +1,123 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FUCKINGPACK* | Login</title>
-    <link rel="stylesheet" href="painel.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Sora:wght@400;600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Painel Administrativo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            max-width: 90%;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .error-message {
+            color: #f44336;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            max-width: 150px;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>FUCKINGPACK*</h1>
-        <h2>Acesso Restrito</h2>
-    </header>
-    <main>
-        <div class="login-container">
-            <div id="login-form" class="form-container">
-                <h3>Login</h3>
-                <div id="login-error" class="error-message" style="display: none;"></div>
-                <form id="auth-form" onsubmit="autenticar(event)">
-                    <div class="form-group">
-                        <label for="password">Senha:</label>
-                        <input type="password" id="password" name="password" required placeholder="Digite a senha de acesso">
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn-primary">Entrar</button>
-                    </div>
-                </form>
-            </div>
+    <div class="login-container">
+        <div class="logo">
+            <h2>FUCKINGPACK*</h2>
         </div>
-    </main>
+        <h1>Painel Administrativo</h1>
+        <div class="form-group">
+            <label for="password">Senha:</label>
+            <input type="password" id="password" placeholder="Digite a senha">
+        </div>
+        <button id="login-btn">Entrar</button>
+        <div id="error-message" class="error-message">Senha incorreta. Tente novamente.</div>
+    </div>
+
     <script>
-        // URL do Google Apps Script publicado como aplicativo da web
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxn3CRpVo_tN_H9miwjkDIzAjUNA7XXySmaNdXOrASR4jmdQ0CFVQtNZ4s1uCA54Qy2/exec';
-        
-        // Verificar se já existe uma sessão ativa
-        window.onload = function() {
-            const authToken = localStorage.getItem("authToken");
-            if (authToken) {
-                // Verificar se o token ainda é válido
-                verificarAutenticacao(authToken);
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar se já está autenticado
+            if (localStorage.getItem('authenticated') === 'true') {
+                window.location.href = 'painel.html';
             }
-        };
-        
-        // Função para autenticar o usuário
-        async function autenticar(event) {
-            event.preventDefault();
-            
-            const senha = document.getElementById("password").value;
-            const errorElement = document.getElementById("login-error");
-            
-            try {
-                // Verificar a senha
-                const response = await fetch(`${SCRIPT_URL}?checkAuth=true&auth=${senha}`);
-                const data = await response.json();
-                
-                if (data.success) {
-                    // Armazenar o token de autenticação
-                    localStorage.setItem("authToken", senha);
-                    
-                    // Redirecionar para o painel
-                    window.location.href = "painel.html";
+
+            const loginBtn = document.getElementById('login-btn');
+            const passwordInput = document.getElementById('password');
+            const errorMessage = document.getElementById('error-message');
+
+            // Senha correta
+            const correctPassword = '9RHWoXAb0X';
+
+            loginBtn.addEventListener('click', function() {
+                if (passwordInput.value === correctPassword) {
+                    // Autenticação bem-sucedida
+                    localStorage.setItem('authenticated', 'true');
+                    window.location.href = 'painel.html';
                 } else {
-                    // Exibir mensagem de erro
-                    errorElement.textContent = "Senha incorreta. Tente novamente.";
-                    errorElement.style.display = "block";
-                    
-                    // Limpar o campo de senha
-                    document.getElementById("password").value = "";
+                    // Senha incorreta
+                    errorMessage.style.display = 'block';
+                    passwordInput.value = '';
                 }
-            } catch (error) {
-                console.error("Erro:", error);
-                errorElement.textContent = "Erro ao autenticar. Tente novamente mais tarde.";
-                errorElement.style.display = "block";
-            }
-        }
-        
-        // Função para verificar se o token de autenticação ainda é válido
-        async function verificarAutenticacao(token) {
-            try {
-                const response = await fetch(`${SCRIPT_URL}?checkAuth=true&auth=${token}`);
-                const data = await response.json();
-                
-                if (data.success) {
-                    // Token válido, redirecionar para o painel
-                    window.location.href = "painel.html";
-                } else {
-                    // Token inválido, remover do localStorage
-                    localStorage.removeItem("authToken");
+            });
+
+            // Permitir login ao pressionar Enter
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    loginBtn.click();
                 }
-            } catch (error) {
-                console.error("Erro:", error);
-                // Em caso de erro, remover o token para garantir
-                localStorage.removeItem("authToken");
-            }
-        }
+            });
+        });
     </script>
 </body>
 </html>
