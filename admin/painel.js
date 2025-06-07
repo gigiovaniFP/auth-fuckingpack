@@ -1,6 +1,9 @@
 // URL do Google Apps Script publicado como aplicativo da web
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzcvTp-jdCwev7WMR8DQg2avN_03J2j-RQ27qpecAF-Wzv1xUPL59nr1S8gbh-Ibcdh/exec';
 
+// URL base do site para autenticação
+const SITE_URL = 'https://fuckingpack.xyz/?code=';
+
 // Variáveis globais
 let dadosAtuais = [];
 let codigoParaExcluir = null;
@@ -91,8 +94,9 @@ function exibirTabela(data) {
         
         // Adicionar botões de ação
         html += `<td class="actions-column">
-            <button onclick="mostrarFormularioEdicao('${linha.Código}')" class="btn-edit">✏️ Editar</button>
-            <button onclick="iniciarExclusao('${linha.Código}')" class="btn-delete">🗑️ Excluir</button>
+            <button onclick="gerarURL('${linha.Código}')" class="btn-url" title="Gerar URL para o cliente">🔗 URL</button>
+            <button onclick="mostrarFormularioEdicao('${linha.Código}')" class="btn-edit" title="Editar produto">✏️ Editar</button>
+            <button onclick="iniciarExclusao('${linha.Código}')" class="btn-delete" title="Excluir produto">🗑️ Excluir</button>
         </td>`;
         
         html += '</tr>';
@@ -102,6 +106,84 @@ function exibirTabela(data) {
     
     // Exibir a tabela
     document.getElementById('resultado').innerHTML = html;
+}
+
+// Função para gerar URL de autenticação
+function gerarURL(codigo) {
+    const url = SITE_URL + codigo;
+    
+    // Copiar a URL para a área de transferência
+    navigator.clipboard.writeText(url)
+        .then(() => {
+            mostrarNotificacao(`URL copiada para a área de transferência: ${url}`, 'success');
+        })
+        .catch(err => {
+            console.error('Erro ao copiar URL: ', err);
+            // Mostrar um modal com a URL se não conseguir copiar
+            mostrarModalURL(url);
+        });
+}
+
+// Função para mostrar modal com a URL
+function mostrarModalURL(url) {
+    // Criar um modal temporário se não existir
+    let modal = document.getElementById('modal-url');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'modal-url';
+        modal.className = 'modal';
+        
+        const modalContent = document.createElement('div');
+        modalContent.className = 'modal-content';
+        
+        const title = document.createElement('h3');
+        title.textContent = 'URL de Autenticação';
+        
+        const urlDisplay = document.createElement('div');
+        urlDisplay.className = 'url-display';
+        
+        const urlInput = document.createElement('input');
+        urlInput.type = 'text';
+        urlInput.id = 'url-input';
+        urlInput.readOnly = true;
+        urlInput.value = url;
+        
+        const actions = document.createElement('div');
+        actions.className = 'form-actions';
+        
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'btn-primary';
+        copyBtn.textContent = 'Copiar';
+        copyBtn.onclick = function() {
+            document.getElementById('url-input').select();
+            document.execCommand('copy');
+            mostrarNotificacao('URL copiada para a área de transferência!', 'success');
+        };
+        
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'btn-cancel';
+        closeBtn.textContent = 'Fechar';
+        closeBtn.onclick = function() {
+            document.getElementById('modal-url').style.display = 'none';
+        };
+        
+        actions.appendChild(copyBtn);
+        actions.appendChild(closeBtn);
+        
+        urlDisplay.appendChild(urlInput);
+        
+        modalContent.appendChild(title);
+        modalContent.appendChild(urlDisplay);
+        modalContent.appendChild(actions);
+        
+        modal.appendChild(modalContent);
+        document.body.appendChild(modal);
+    } else {
+        document.getElementById('url-input').value = url;
+    }
+    
+    // Mostrar o modal
+    modal.style.display = 'flex';
 }
 
 // Função para mostrar o formulário de adição
