@@ -1,29 +1,3 @@
-// Adicione este código no início do seu arquivo painel.js existente
-
-// Verificar autenticação ao carregar a página
-window.onload = function() {
-    const autenticado = localStorage.getItem('autenticado');
-    if (autenticado !== 'true') {
-        // Não está autenticado, redirecionar para a página de login
-        window.location.href = 'login.html';
-        return;
-    }
-    
-    // Se estiver autenticado, carregar os dados normalmente
-    carregarDados();
-};
-
-// Função para fazer logout
-function logout() {
-    // Remover o estado de autenticação
-    localStorage.removeItem('autenticado');
-    
-    // Redirecionar para a página de login
-    window.location.href = 'login.html';
-}
-
-// O restante do seu código painel.js continua aqui...
-
 // URL do Google Apps Script publicado como aplicativo da web
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxn3CRpVo_tN_H9miwjkDIzAjUNA7XXySmaNdXOrASR4jmdQ0CFVQtNZ4s1uCA54Qy2/exec';
 
@@ -151,7 +125,7 @@ function exibirTabela(data) {
             if (chave === 'Data') {
                 html += `<td>${formatarData(valor)}</td>`;
             } else {
-                html += `<td>${valor || '-'}</td>`;
+                html += `<td>${valor || '-'}`;
             }
         });
         
@@ -237,6 +211,7 @@ function mostrarModalURL(url) {
         
         modalContent.appendChild(title);
         modalContent.appendChild(urlDisplay);
+        
         modalContent.appendChild(actions);
         
         modal.appendChild(modalContent);
