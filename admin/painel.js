@@ -1,5 +1,9 @@
 // URL do Google Apps Script publicado como aplicativo da web
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwKfUv7zGez-2FYGDDP1bYFL9a3NckONq3yWkmnCiep4kN74JphbE4DbwuAhM9QNIs8/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzcvTp-jdCwev7WMR8DQg2avN_03J2j-RQ27qpecAF-Wzv1xUPL59nr1S8gbh-Ibcdh/exec';
+
+// Variáveis globais
+let dadosAtuais = [];
+let codigoParaExcluir = null;
 
 // Função para formatar a data
 function formatarData(dataString) {
@@ -19,6 +23,19 @@ function formatarData(dataString) {
     return `${dia}/${mes}/${ano} ${hora}:${minuto}`;
 }
 
+// Função para mostrar notificação
+function mostrarNotificacao(mensagem, tipo) {
+    const notificacao = document.getElementById('notificacao');
+    notificacao.textContent = mensagem;
+    notificacao.className = `notificacao ${tipo}`;
+    notificacao.style.display = 'block';
+    
+    // Esconder a notificação após 5 segundos
+    setTimeout(() => {
+        notificacao.style.display = 'none';
+    }, 5000);
+}
+
 // Função para carregar os dados da planilha
 async function carregarDados() {
     try {
@@ -29,11 +46,15 @@ async function carregarDados() {
         const response = await fetch(`${SCRIPT_URL}?painel=todos`);
         const data = await response.json();
         
+        // Armazenar os dados para uso posterior
+        dadosAtuais = data;
+        
         // Exibir os dados na tabela
         exibirTabela(data);
     } catch (error) {
         console.error('Erro:', error);
         document.getElementById('resultado').innerHTML = 'Erro ao carregar dados.';
+        mostrarNotificacao('Erro ao carregar dados.', 'error');
     }
 }
 
@@ -53,6 +74,7 @@ function exibirTabela(data) {
     Object.keys(data[0]).forEach(coluna => {
         html += `<th>${coluna}</th>`;
     });
+    html += '<th>Ações</th>'; // Coluna adicional para ações
     html += '</tr>';
     
     // Linhas da tabela
@@ -66,6 +88,13 @@ function exibirTabela(data) {
                 html += `<td>${valor || '-'}</td>`;
             }
         });
+        
+        // Adicionar botões de ação
+        html += `<td class="actions-column">
+            <button onclick="mostrarFormularioEdicao('${linha.Código}')" class="btn-edit">✏️ Editar</button>
+            <button onclick="iniciarExclusao('${linha.Código}')" class="btn-delete">🗑️ Excluir</button>
+        </td>`;
+        
         html += '</tr>';
     });
     
@@ -73,6 +102,217 @@ function exibirTabela(data) {
     
     // Exibir a tabela
     document.getElementById('resultado').innerHTML = html;
+}
+
+// Função para mostrar o formulário de adição
+function mostrarFormularioAdicao() {
+    document.getElementById('form-adicao').style.display = 'block';
+    document.getElementById('form-edicao').style.display = 'none';
+    document.getElementById('adicionar-form').reset();
+}
+
+// Função para cancelar a adição
+function cancelarAdicao() {
+    document.getElementById('form-adicao').style.display = 'none';
+}
+
+// Função para adicionar um novo produto
+async function adicionarProduto(event) {
+    event.preventDefault();
+    
+    // Obter os dados do formulário
+    const codigo = document.getElementById('add-codigo').value;
+    const cliente = document.getElementById('add-cliente').value;
+    const produto = document.getElementById('add-produto').value;
+    const quantidade = document.getElementById('add-quantidade').value;
+    
+    // Verificar se o código já existe
+    if (dadosAtuais.some(item => item.Código === codigo)) {
+        mostrarNotificacao('Erro: Código já existe.', 'error');
+        return;
+    }
+    
+    try {
+        // Preparar os dados para envio
+        const dados = {
+            action: 'add',
+            data: {
+                'Código': codigo,
+                'Cliente': cliente,
+                'Produto': produto,
+                'Quantidade': quantidade
+            }
+        };
+        
+        // Enviar os dados para o Google Apps Script
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify(dados)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Esconder o formulário
+            document.getElementById('form-adicao').style.display = 'none';
+            
+            // Recarregar os dados
+            await carregarDados();
+            
+            // Mostrar notificação de sucesso
+            mostrarNotificacao('Produto adicionado com sucesso!', 'success');
+        } else {
+            mostrarNotificacao(`Erro: ${result.error}`, 'error');
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        mostrarNotificacao('Erro ao adicionar produto.', 'error');
+    }
+}
+
+// Função para mostrar o formulário de edição
+function mostrarFormularioEdicao(codigo) {
+    // Encontrar o produto pelo código
+    const produto = dadosAtuais.find(item => item.Código === codigo);
+    
+    if (!produto) {
+        mostrarNotificacao('Produto não encontrado.', 'error');
+        return;
+    }
+    
+    // Preencher o formulário com os dados do produto
+    document.getElementById('edit-codigo-original').value = codigo;
+    document.getElementById('edit-codigo').value = produto.Código;
+    document.getElementById('edit-cliente').value = produto.Cliente;
+    document.getElementById('edit-produto').value = produto.Produto;
+    document.getElementById('edit-quantidade').value = produto.Quantidade;
+    document.getElementById('edit-data').value = formatarData(produto.Data);
+    
+    // Mostrar o formulário
+    document.getElementById('form-edicao').style.display = 'block';
+    document.getElementById('form-adicao').style.display = 'none';
+}
+
+// Função para cancelar a edição
+function cancelarEdicao() {
+    document.getElementById('form-edicao').style.display = 'none';
+}
+
+// Função para editar um produto
+async function editarProduto(event) {
+    event.preventDefault();
+    
+    // Obter os dados do formulário
+    const codigoOriginal = document.getElementById('edit-codigo-original').value;
+    const codigo = document.getElementById('edit-codigo').value;
+    const cliente = document.getElementById('edit-cliente').value;
+    const produto = document.getElementById('edit-produto').value;
+    const quantidade = document.getElementById('edit-quantidade').value;
+    
+    // Verificar se o novo código já existe (se for diferente do original)
+    if (codigo !== codigoOriginal && dadosAtuais.some(item => item.Código === codigo)) {
+        mostrarNotificacao('Erro: Código já existe.', 'error');
+        return;
+    }
+    
+    try {
+        // Preparar os dados para envio
+        const dados = {
+            action: 'edit',
+            code: codigoOriginal,
+            data: {
+                'Código': codigo,
+                'Cliente': cliente,
+                'Produto': produto,
+                'Quantidade': quantidade
+            }
+        };
+        
+        // Enviar os dados para o Google Apps Script
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify(dados)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Esconder o formulário
+            document.getElementById('form-edicao').style.display = 'none';
+            
+            // Recarregar os dados
+            await carregarDados();
+            
+            // Mostrar notificação de sucesso
+            mostrarNotificacao('Produto atualizado com sucesso!', 'success');
+        } else {
+            mostrarNotificacao(`Erro: ${result.error}`, 'error');
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        mostrarNotificacao('Erro ao atualizar produto.', 'error');
+    }
+}
+
+// Função para iniciar o processo de exclusão
+function iniciarExclusao(codigo) {
+    // Armazenar o código para exclusão
+    codigoParaExcluir = codigo;
+    
+    // Mostrar o código no modal
+    document.getElementById('codigo-exclusao').textContent = codigo;
+    
+    // Mostrar o modal de confirmação
+    document.getElementById('modal-confirmacao').style.display = 'flex';
+}
+
+// Função para cancelar a exclusão
+function cancelarExclusao() {
+    document.getElementById('modal-confirmacao').style.display = 'none';
+    codigoParaExcluir = null;
+}
+
+// Função para confirmar a exclusão
+async function confirmarExclusao() {
+    if (!codigoParaExcluir) {
+        cancelarExclusao();
+        return;
+    }
+    
+    try {
+        // Preparar os dados para envio
+        const dados = {
+            action: 'delete',
+            code: codigoParaExcluir
+        };
+        
+        // Enviar os dados para o Google Apps Script
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify(dados)
+        });
+        
+        const result = await response.json();
+        
+        // Esconder o modal
+        document.getElementById('modal-confirmacao').style.display = 'none';
+        
+        if (result.success) {
+            // Recarregar os dados
+            await carregarDados();
+            
+            // Mostrar notificação de sucesso
+            mostrarNotificacao('Produto excluído com sucesso!', 'success');
+        } else {
+            mostrarNotificacao(`Erro: ${result.error}`, 'error');
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        mostrarNotificacao('Erro ao excluir produto.', 'error');
+    }
+    
+    // Limpar o código para exclusão
+    codigoParaExcluir = null;
 }
 
 // Carregar os dados quando a página for carregada
