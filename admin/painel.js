@@ -1,5 +1,5 @@
 // URL do Google Apps Script publicado como aplicativo da web
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzcvTp-jdCwev7WMR8DQg2avN_03J2j-RQ27qpecAF-Wzv1xUPL59nr1S8gbh-Ibcdh/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw3t1Du_aX_EbljanlJgV9Zh3AR_gY006xtEilrmFEqlgLf0pQ8pYADHWxqnd983EPu/exec';
 
 // URL base do site para autenticação
 const SITE_URL = 'https://fuckingpack.xyz/?code=';
@@ -7,6 +7,28 @@ const SITE_URL = 'https://fuckingpack.xyz/?code=';
 // Variáveis globais
 let dadosAtuais = [];
 let codigoParaExcluir = null;
+
+// Verificar autenticação ao carregar a página
+window.onload = function() {
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+        // Redirecionar para a página de login se não houver token
+        window.location.href = 'login.html';
+        return;
+    }
+    
+    // Carregar os dados com o token de autenticação
+    carregarDados();
+};
+
+// Função para fazer logout
+function logout() {
+    // Remover o token de autenticação
+    localStorage.removeItem('authToken');
+    
+    // Redirecionar para a página de login
+    window.location.href = 'login.html';
+}
 
 // Função para formatar a data
 function formatarData(dataString) {
@@ -42,12 +64,27 @@ function mostrarNotificacao(mensagem, tipo) {
 // Função para carregar os dados da planilha
 async function carregarDados() {
     try {
+        // Obter o token de autenticação
+        const authToken = localStorage.getItem('authToken');
+        if (!authToken) {
+            window.location.href = 'login.html';
+            return;
+        }
+        
         // Exibir mensagem de carregamento
         document.getElementById('resultado').innerHTML = 'Carregando dados...';
         
-        // Fazer a requisição para o Google Apps Script
-        const response = await fetch(`${SCRIPT_URL}?painel=todos`);
+        // Fazer a requisição para o Google Apps Script com o token de autenticação
+        const response = await fetch(`${SCRIPT_URL}?painel=todos&auth=${authToken}`);
         const data = await response.json();
+        
+        // Verificar se a autenticação falhou
+        if (data.requireAuth) {
+            // Token inválido, redirecionar para a página de login
+            localStorage.removeItem('authToken');
+            window.location.href = 'login.html';
+            return;
+        }
         
         // Armazenar os dados para uso posterior
         dadosAtuais = data;
@@ -202,6 +239,13 @@ function cancelarAdicao() {
 async function adicionarProduto(event) {
     event.preventDefault();
     
+    // Obter o token de autenticação
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+        window.location.href = 'login.html';
+        return;
+    }
+    
     // Obter os dados do formulário
     const codigo = document.getElementById('add-codigo').value;
     const cliente = document.getElementById('add-cliente').value;
@@ -218,6 +262,7 @@ async function adicionarProduto(event) {
         // Preparar os dados para envio
         const dados = {
             action: 'add',
+            auth: authToken,
             data: {
                 'Código': codigo,
                 'Cliente': cliente,
@@ -233,6 +278,14 @@ async function adicionarProduto(event) {
         });
         
         const result = await response.json();
+        
+        // Verificar se a autenticação falhou
+        if (result.requireAuth) {
+            // Token inválido, redirecionar para a página de login
+            localStorage.removeItem('authToken');
+            window.location.href = 'login.html';
+            return;
+        }
         
         if (result.success) {
             // Esconder o formulário
@@ -284,6 +337,13 @@ function cancelarEdicao() {
 async function editarProduto(event) {
     event.preventDefault();
     
+    // Obter o token de autenticação
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+        window.location.href = 'login.html';
+        return;
+    }
+    
     // Obter os dados do formulário
     const codigoOriginal = document.getElementById('edit-codigo-original').value;
     const codigo = document.getElementById('edit-codigo').value;
@@ -301,6 +361,7 @@ async function editarProduto(event) {
         // Preparar os dados para envio
         const dados = {
             action: 'edit',
+            auth: authToken,
             code: codigoOriginal,
             data: {
                 'Código': codigo,
@@ -317,6 +378,14 @@ async function editarProduto(event) {
         });
         
         const result = await response.json();
+        
+        // Verificar se a autenticação falhou
+        if (result.requireAuth) {
+            // Token inválido, redirecionar para a página de login
+            localStorage.removeItem('authToken');
+            window.location.href = 'login.html';
+            return;
+        }
         
         if (result.success) {
             // Esconder o formulário
@@ -361,10 +430,18 @@ async function confirmarExclusao() {
         return;
     }
     
+    // Obter o token de autenticação
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+        window.location.href = 'login.html';
+        return;
+    }
+    
     try {
         // Preparar os dados para envio
         const dados = {
             action: 'delete',
+            auth: authToken,
             code: codigoParaExcluir
         };
         
@@ -378,6 +455,14 @@ async function confirmarExclusao() {
         
         // Esconder o modal
         document.getElementById('modal-confirmacao').style.display = 'none';
+        
+        // Verificar se a autenticação falhou
+        if (result.requireAuth) {
+            // Token inválido, redirecionar para a página de login
+            localStorage.removeItem('authToken');
+            window.location.href = 'login.html';
+            return;
+        }
         
         if (result.success) {
             // Recarregar os dados
@@ -396,7 +481,4 @@ async function confirmarExclusao() {
     // Limpar o código para exclusão
     codigoParaExcluir = null;
 }
-
-// Carregar os dados quando a página for carregada
-window.onload = carregarDados;
 
