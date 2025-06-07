@@ -125,7 +125,7 @@ function exibirTabela(data) {
             if (chave === 'Data') {
                 html += `<td>${formatarData(valor)}</td>`;
             } else {
-                html += `<td>${valor || '-'}`;
+                html += `<td>${valor || '-'}</td>`;
             }
         });
         
@@ -211,7 +211,6 @@ function mostrarModalURL(url) {
         
         modalContent.appendChild(title);
         modalContent.appendChild(urlDisplay);
-        
         modalContent.appendChild(actions);
         
         modal.appendChild(modalContent);
