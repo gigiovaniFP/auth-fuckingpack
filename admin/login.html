@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FUCKINGPACK* | Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Sora:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Sora', sans-serif;
+            background-color: #111;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #000;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+        }
+
+        header h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 32px;
+            margin: 0;
+        }
+
+        header h2 {
+            font-size: 18px;
+            font-weight: 400;
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .login-container {
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            margin: 40px auto;
+        }
+
+        .form-container {
+            background-color: #222;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #444;
+        }
+
+        .form-container h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-family: 'Oswald', sans-serif;
+            color: #fff;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background-color: #333;
+            color: #fff;
+            font-family: 'Sora', sans-serif;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #666;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 16px;
+            font-family: 'Sora', sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #333;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #444;
+        }
+
+        .error-message {
+            background-color: #822c2c;
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>FUCKINGPACK*</h1>
+        <h2>Acesso Restrito</h2>
+    </header>
+    <main>
+        <div class="login-container">
+            <div id="login-form" class="form-container">
+                <h3>Login</h3>
+                <div id="login-error" class="error-message" style="display: none;"></div>
+                <form id="auth-form" onsubmit="autenticar(event)">
+                    <div class="form-group">
+                        <label for="password">Senha:</label>
+                        <input type="password" id="password" name="password" required placeholder="Digite a senha de acesso">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">Entrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    <script>
+        // Senha definida pelo usuário
+        const SENHA_CORRETA = '9RHWoXAb0X';
+        
+        // Função para autenticar o usuário
+        function autenticar(event) {
+            event.preventDefault();
+            
+            const senha = document.getElementById('password').value;
+            const errorElement = document.getElementById('login-error');
+            
+            if (senha === SENHA_CORRETA) {
+                // Armazenar o estado de autenticação
+                localStorage.setItem('autenticado', 'true');
+                
+                // Redirecionar para o painel
+                window.location.href = 'painel.html';
+            } else {
+                // Exibir mensagem de erro
+                errorElement.textContent = 'Senha incorreta. Tente novamente.';
+                errorElement.style.display = 'block';
+                
+                // Limpar o campo de senha
+                document.getElementById('password').value = '';
+            }
+        }
+        
+        // Verificar se já está autenticado
+        window.onload = function() {
+            const autenticado = localStorage.getItem('autenticado');
+            if (autenticado === 'true') {
+                // Já está autenticado, redirecionar para o painel
+                window.location.href = 'painel.html';
+            }
+        };
+    </script>
+</body>
+</html>
+
