@@ -1,5 +1,5 @@
 // URL do Google Apps Script publicado como aplicativo da web
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwKfUv7zGez-2FYGDDP1bYFL9a3NckONq3yWkmnCiep4kN74JphbE4DbwuAhM9QNIs8/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz8TfojeOWC8aVXJAuhMOLRHhXuuxl0arZDwK8GOAGwPeW45WWJI-grUBSg-9o3Vx-_/exec';
 
 // Função para obter parâmetros da URL
 function getUrlParams() {
