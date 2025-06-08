@@ -55,7 +55,7 @@ async function verificarCodigo(codigo) {
             <b>Cliente:</b> ${data['Cliente']}<br>
             <b>Produto:</b> ${data['Produto']}<br>
             <b>Quantidade:</b> ${data['Quantidade']}<br>
-            <b>Data:</b> ${formatarData(data['Data'])}<br>
+
         `;
     } catch (error) {
         console.error('Erro:', error);
