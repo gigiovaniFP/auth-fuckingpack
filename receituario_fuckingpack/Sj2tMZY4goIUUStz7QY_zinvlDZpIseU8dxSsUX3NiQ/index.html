@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FUCKINGPACK* | Receituário</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Sora:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main>
+        <h1 class="titulo">FUCKINGPACK*</h1>
+        <h2>Preenchimento de Receituário Médico</h2>
+        <div class="receituario-container">
+            <div class="upload-section">
+                <div class="image-placeholder">
+                    <img id="uploaded-image" src="" alt="Imagem do Receituário" style="display: none;">
+                    <p id="upload-text">Upload de imagem do receituário</p>
+                </div>
+                <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                <button id="upload-button" class="btn-primary">Upload</button>
+            </div>
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="paciente-nome">Nome do Paciente:</label>
+                    <input type="text" id="paciente-nome" placeholder="Nome completo">
+                </div>
+                <div class="form-group">
+                    <label for="paciente-endereco">Endereço:</label>
+                    <input type="text" id="paciente-endereco" placeholder="Endereço completo">
+                </div>
+                <div class="form-group">
+                    <label for="medicamento">Medicamento:</label>
+                    <input type="text" id="medicamento" placeholder="Nome do medicamento">
+                </div>
+                <div class="form-group">
+                    <label for="quantidade">Quantidade:</label>
+                    <input type="text" id="quantidade" placeholder="Ex: 1 frasco (500ml)">
+                </div>
+                <div class="form-group">
+                    <label for="sugestao-preenchimento">Preenchimento Sugerido:</label>
+                    <textarea id="sugestao-preenchimento" rows="4" readonly></textarea>
+                </div>
+                <button id="preencher-button" class="btn-success">Preencher</button>
+            </div>
+        </div>
+        <button id="gerar-receituario-button" class="btn-primary">Gerar Receituário</button>
+    </main>
+    <script src="./script.js"></script>
+</body>
+</html>
+
