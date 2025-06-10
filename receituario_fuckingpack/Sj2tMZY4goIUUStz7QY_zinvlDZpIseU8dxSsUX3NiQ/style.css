@@ -1,0 +1,147 @@
+body {
+    font-family: 'Sora', sans-serif;
+    background-color: #111;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; /* Use min-height para permitir que o conteúdo se expanda */
+    margin: 0;
+    padding: 20px; /* Adiciona um padding para evitar que o conteúdo cole nas bordas */
+}
+
+main {
+    text-align: center;
+    width: 90%;
+    max-width: 900px; /* Aumenta a largura máxima para acomodar o layout de duas colunas */
+    background: #1a1a1a;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+.titulo {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    color: #007bff; /* Cor azul para o título principal */
+}
+
+h2 {
+    font-size: 1.8em;
+    margin-bottom: 25px;
+    color: #eee;
+}
+
+.receituario-container {
+    display: flex;
+    flex-wrap: wrap; /* Permite que as colunas quebrem em telas menores */
+    gap: 30px; /* Espaçamento entre as colunas */
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.upload-section,
+.form-section {
+    flex: 1; /* Faz com que as seções ocupem o espaço disponível */
+    min-width: 300px; /* Largura mínima para as seções */
+    background-color: #222;
+    padding: 25px;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.image-placeholder {
+    width: 100%;
+    height: 250px;
+    border: 2px dashed #444;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #888;
+    font-size: 1.1em;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.image-placeholder img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    position: absolute;
+}
+
+.image-placeholder p {
+    z-index: 1;
+}
+
+.btn-primary,
+.btn-success {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    margin-top: 15px; /* Espaçamento acima dos botões */
+}
+
+.btn-primary:hover,
+.btn-success:hover {
+    background-color: #0056b3;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #ccc;
+    font-size: 0.95em;
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+    width: calc(100% - 20px); /* Ajusta a largura para considerar o padding */
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background-color: #333;
+    color: #fff;
+    font-size: 1em;
+    box-sizing: border-box; /* Inclui padding e borda na largura total */
+}
+
+.form-group textarea {
+    resize: vertical; /* Permite redimensionar verticalmente */
+    min-height: 80px;
+}
+
+#gerar-receituario-button {
+    margin-top: 30px;
+    padding: 15px 40px;
+    font-size: 1.1em;
+    background-color: #28a745; /* Verde para o botão principal */
+}
+
+#gerar-receituario-button:hover {
+    background-color: #218838;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .receituario-container {
+        flex-direction: column; /* Empilha as colunas em telas menores */
+    }
+    .upload-section, .form-section {
+        min-width: unset; /* Remove a largura mínima para melhor ajuste */
+        width: 100%;
+    }
+}
+
