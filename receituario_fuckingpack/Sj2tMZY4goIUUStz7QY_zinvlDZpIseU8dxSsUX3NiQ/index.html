@@ -12,41 +12,100 @@
     <main>
         <h1 class="titulo">FUCKINGPACK*</h1>
         <h2>Preenchimento de Receituário Médico</h2>
+        
         <div class="receituario-container">
             <div class="upload-section">
-                <div class="image-placeholder">
+                <div class="image-placeholder" id="drop-zone">
                     <img id="uploaded-image" src="" alt="Imagem do Receituário" style="display: none;">
-                    <p id="upload-text">Upload de imagem do receituário</p>
+                    <div id="upload-text" class="upload-content">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7,10 12,15 17,10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        <p>Arraste a imagem aqui ou clique para selecionar</p>
+                        <span>Formatos aceitos: JPG, PNG, PDF</span>
+                    </div>
                 </div>
-                <input type="file" id="image-upload" accept="image/*" style="display: none;">
-                <button id="upload-button" class="btn-primary">Upload</button>
+                <input type="file" id="image-upload" accept="image/*,.pdf" style="display: none;">
+                <button id="upload-button" class="btn-primary">Selecionar Arquivo</button>
             </div>
+            
             <div class="form-section">
                 <div class="form-group">
                     <label for="paciente-nome">Nome do Paciente:</label>
-                    <input type="text" id="paciente-nome" placeholder="Nome completo">
+                    <input type="text" id="paciente-nome" placeholder="Nome completo do paciente">
                 </div>
+                
                 <div class="form-group">
                     <label for="paciente-endereco">Endereço:</label>
-                    <input type="text" id="paciente-endereco" placeholder="Endereço completo">
+                    <input type="text" id="paciente-endereco" placeholder="Endereço completo com número, cidade e estado">
                 </div>
+                
                 <div class="form-group">
-                    <label for="medicamento">Medicamento:</label>
-                    <input type="text" id="medicamento" placeholder="Nome do medicamento">
+                    <label for="medicamento">Medicamento/Prescrição:</label>
+                    <textarea id="medicamento" rows="3" placeholder="Digite o medicamento ou prescrição (ex: Codein, Fosfato de Codeína, etc.)"></textarea>
                 </div>
+                
                 <div class="form-group">
                     <label for="quantidade">Quantidade:</label>
-                    <input type="text" id="quantidade" placeholder="Ex: 1 frasco (500ml)">
+                    <input type="text" id="quantidade" placeholder="Ex: 120ml, 1 frasco (500ml)">
                 </div>
+                
                 <div class="form-group">
-                    <label for="sugestao-preenchimento">Preenchimento Sugerido:</label>
-                    <textarea id="sugestao-preenchimento" rows="4" readonly></textarea>
+                    <label for="sugestao-preenchimento">Prescrição Médica Sugerida:</label>
+                    <textarea id="sugestao-preenchimento" rows="6" placeholder="A prescrição médica aparecerá aqui automaticamente... (Editável)"></textarea>
                 </div>
-                <button id="preencher-button" class="btn-success">Preencher</button>
+                
+                <div class="button-group">
+                    <button id="preencher-button" class="btn-success">Gerar Prescrição</button>
+                    <button id="limpar-button" class="btn-secondary">Limpar Campos</button>
+                </div>
             </div>
         </div>
-        <button id="gerar-receituario-button" class="btn-primary">Gerar Receituário</button>
+        
+        <div class="action-buttons">
+            <button id="gerar-receituario-button" class="btn-primary">Gerar Receituário</button>
+            <button id="config-zapsign-button" class="btn-secondary">Configurar ZapSign</button>
+        </div>
     </main>
+
+    <!-- Modal de Configuração do ZapSign -->
+    <div id="zapsign-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Configuração do ZapSign</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="zapsign-email">Email do Médico:</label>
+                    <input type="email" id="zapsign-email" placeholder="drmarkusbraga@outlook.com">
+                </div>
+                <div class="form-group">
+                    <label for="zapsign-phone">Telefone:</label>
+                    <input type="tel" id="zapsign-phone" placeholder="(11) 99999-9999">
+                </div>
+                <div class="form-group">
+                    <label for="zapsign-password">Senha do ZapSign:</label>
+                    <input type="password" id="zapsign-password" placeholder="Senha da conta ZapSign">
+                </div>
+                <div class="form-group">
+                    <label for="medico-nome">Nome do Médico:</label>
+                    <input type="text" id="medico-nome" placeholder="MARKUS VINICIUS BRAGA" style="text-transform: uppercase;">
+                </div>
+                <div class="form-group">
+                    <label for="medico-crm">CRM:</label>
+                    <input type="text" id="medico-crm" placeholder="128808-SP">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="salvar-config" class="btn-success">Salvar Configuração</button>
+                <button id="cancelar-config" class="btn-secondary">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <script src="./script.js"></script>
 </body>
 </html>
