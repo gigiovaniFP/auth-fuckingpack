@@ -1,1 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FUCKINGPACK* | Painel</title>
+    <link rel="stylesheet" href="painel.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Sora:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>FUCKINGPACK*</h1>
+        <h2>Painel Privado</h2>
+    </header>
+    <main>
+        <div class="painel-container">
+            <div class="actions-bar">
+                <button onclick="carregarDados()" class="btn-primary">🔄 Atualizar Painel</button>
+                <button onclick="mostrarFormularioAdicao()" class="btn-success">➕ Adicionar Produto</button>
+
+            </div>
+            
+            <!-- Formulário para adicionar novo produto -->
+            <div id="form-adicao" class="form-container" style="display: none;">
+                <h3>Adicionar Novo Produto</h3>
+                <form id="adicionar-form" onsubmit="adicionarProduto(event)">
+                    <div class="form-group">
+                        <label for="add-codigo">Código:</label>
+                        <input type="text" id="add-codigo" name="Código" required placeholder="Ex: FP0001">
+                    </div>
+                    <div class="form-group">
+                        <label for="add-cliente">Cliente:</label>
+                        <input type="text" id="add-cliente" name="Cliente" required placeholder="Nome do cliente">
+                    </div>
+                    <div class="form-group">
+                        <label for="add-produto">Produto:</label>
+                        <input type="text" id="add-produto" name="Produto" required placeholder="Nome do produto">
+                    </div>
+                    <div class="form-group">
+                        <label for="add-quantidade">Quantidade:</label>
+                        <input type="text" id="add-quantidade" name="Quantidade" required placeholder="Ex: 10g">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" onclick="cancelarAdicao()" class="btn-cancel">Cancelar</button>
+                        <button type="submit" class="btn-success">Salvar</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Formulário para editar produto existente -->
+            <div id="form-edicao" class="form-container" style="display: none;">
+                <h3>Editar Produto</h3>
+                <form id="editar-form" onsubmit="editarProduto(event)">
+                    <input type="hidden" id="edit-codigo-original">
+                    <div class="form-group">
+                        <label for="edit-codigo">Código:</label>
+                        <input type="text" id="edit-codigo" name="Código" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-cliente">Cliente:</label>
+                        <input type="text" id="edit-cliente" name="Cliente" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-produto">Produto:</label>
+                        <input type="text" id="edit-produto" name="Produto" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-quantidade">Quantidade:</label>
+                        <input type="text" id="edit-quantidade" name="Quantidade" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-data">Data de Autenticação:</label>
+                        <input type="text" id="edit-data" name="Data" readonly disabled>
+                        <small>A data é registrada automaticamente na primeira autenticação.</small>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" onclick="cancelarEdicao()" class="btn-cancel">Cancelar</button>
+                        <button type="submit" class="btn-success">Salvar</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Modal de confirmação para exclusão -->
+            <div id="modal-confirmacao" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <h3>Confirmar Exclusão</h3>
+                    <p>Tem certeza que deseja excluir o produto com código <span id="codigo-exclusao"></span>?</p>
+                    <p>Esta ação não pode ser desfeita.</p>
+                    <div class="form-actions">
+                        <button onclick="cancelarExclusao()" class="btn-cancel">Cancelar</button>
+                        <button onclick="confirmarExclusao()" class="btn-danger">Excluir</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Área de notificação -->
+            <div id="notificacao" class="notificacao" style="display: none;"></div>
+            
+            <!-- Tabela de dados -->
+            <div id="resultado" class="tabela">Carregando dados...</div>
+        </div>
+    </main>
+    <script src="painel.js"></script>
+</body>
+</html>
 
